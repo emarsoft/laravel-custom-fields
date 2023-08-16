@@ -10,7 +10,7 @@ class LaravelCustomFieldsServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/custom-fields.php', 'custom-fields');
+        $this->mergeConfigFrom(__DIR__ . '/../config/custom-fields.php', 'custom-fields');
     }
 
     /**
@@ -27,6 +27,7 @@ class LaravelCustomFieldsServiceProvider extends ServiceProvider
         if (!class_exists('CreateCustomFieldsTables')) {
             $this->publishes([
                 __DIR__ . '/../database/migrations/create_custom_fields_tables.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_custom_fields_tables.php'),
+                __DIR__ . '/../database/migrations/create_custom_field_values_tables.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_custom_field_values_tables.php'),
             ], 'migrations');
         }
 
