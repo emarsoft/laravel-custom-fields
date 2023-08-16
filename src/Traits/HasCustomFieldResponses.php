@@ -1,6 +1,6 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\Traits;
+namespace Emarsoft\LaravelCustomFields\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 

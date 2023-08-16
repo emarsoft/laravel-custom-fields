@@ -1,6 +1,6 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\FieldTypes;
+namespace Emarsoft\LaravelCustomFields\FieldTypes;
 
 use Illuminate\Validation\Rule;
 
@@ -13,7 +13,7 @@ class RadioFieldType extends FieldType
                 $this->requiredRule($attributes['required']),
                 'string',
                 'max:255',
-                Rule::in($this->field->answers),
+                Rule::in($this->field->options),
             ],
         ];
     }

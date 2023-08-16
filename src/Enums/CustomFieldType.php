@@ -1,6 +1,6 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\Enums;
+namespace Emarsoft\LaravelCustomFields\Enums;
 
 enum CustomFieldType: string
 {

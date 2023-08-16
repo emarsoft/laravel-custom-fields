@@ -1,6 +1,6 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\ResponseTypes;
+namespace Emarsoft\LaravelCustomFields\ResponseTypes;
 
 class CheckboxResponseType extends ResponseType
 {

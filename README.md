@@ -1,22 +1,18 @@
 # Laravel Custom Fields
 
-> ⚠️ Warning: these docs are incomplete and may reference unsupported functions. This is a pre-release version that is not yet ready for production use.
-
 Laravel Custom Fields is a package that allows you to add custom fields to any Laravel model and associate responses to those fields with other models.
-
-[![Latest Stable Version](https://poser.pugx.org/givebutter/laravel-custom-fields/v/stable)](https://packagist.org/packages/givebutter/laravel-custom-fields) [![Total Downloads](https://poser.pugx.org/givebutter/laravel-custom-fields/downloads)](https://packagist.org/packages/givebutter/laravel-custom-fields) [![License](https://poser.pugx.org/givebutter/laravel-custom-fields/license)](https://packagist.org/packages/givebutter/laravel-custom-fields)
 
 ## Installation
 
-To get started, add the `givebutter/laravel-custom-fields` package to your `composer.json` file and update your dependencies:
+To get started, add the `emarsoft/laravel-custom-fields` package to your `composer.json` file and update your dependencies:
 
 ```bash
-composer require givebutter/laravel-custom-fields
+composer require emarsoft/laravel-custom-fields
 ```
 
 Publish the migration:
 ```bash
-php artisan vendor:publish --provider="Givebutter\LaravelCustomFields\LaravelCustomFieldsServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Emarsoft\LaravelCustomFields\LaravelCustomFieldsServiceProvider" --tag="migrations"
 ```
 
 Run the migration:
@@ -37,7 +33,7 @@ To add basic custom field support, simply add the `HasCustomFields` trait at the
 
 ```php
 use Illuminate\Database\Eloquent\Model;
-use Givebutter\LaravelCustomFields\Traits\HasCustomFields;
+use Emarsoft\LaravelCustomFields\Traits\HasCustomFields;
 
 class Survey extends Model
 {
@@ -53,7 +49,7 @@ Next, we add support to store custom field responses. We'll simply pull in the `
 
 ```php
 use Illuminate\Database\Eloquent\Model;
-use Givebutter\LaravelCustomFields\Traits\HasCustomFieldResponses;
+use Emarsoft\LaravelCustomFields\Traits\HasCustomFieldResponses;
 
 class SurveyResponse extends Model
 {
@@ -275,7 +271,7 @@ $survey->customFields()->get(); // Returned in ascending order.
 
 To publish the configuration file, run the following command:
 ```bash
-php artisan vendor:publish --provider="Givebutter\LaravelCustomFields\LaravelCustomFieldsServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Emarsoft\LaravelCustomFields\LaravelCustomFieldsServiceProvider" --tag="config"
 ```
 
 The configuration file should now be published in `config/custom-fields.php`. The available options and their usage are explained inside the published file.

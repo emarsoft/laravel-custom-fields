@@ -1,16 +1,15 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\ResponseTypes;
+namespace Emarsoft\LaravelCustomFields\ResponseTypes;
 
-use Givebutter\LaravelCustomFields\Models\CustomFieldResponse;
+use Emarsoft\LaravelCustomFields\Models\CustomFieldValue;
 
 abstract class ResponseType
 {
     const VALUE_FIELD = 'value_str';
 
-    public function __construct(
-        protected CustomFieldResponse $response,
-    ) {
+    public function __construct(protected CustomFieldValue $response)
+    {
         //
     }
 
@@ -21,9 +20,7 @@ abstract class ResponseType
 
     public function getValue(): mixed
     {
-        return $this->formatValue(
-            $this->response->getAttribute($this::VALUE_FIELD)
-        );
+        return $this->formatValue($this->response->getAttribute($this::VALUE_FIELD));
     }
 
     public function getValueFriendly(): mixed
@@ -34,7 +31,6 @@ abstract class ResponseType
     public function setValue(mixed $value): void
     {
         $this->clearValues();
-
         $this->response->{$this::VALUE_FIELD} = $this->formatValue($value);
     }
 

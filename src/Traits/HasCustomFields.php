@@ -1,9 +1,8 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\Traits;
+namespace Emarsoft\LaravelCustomFields\Traits;
 
-use Givebutter\LaravelCustomFields\Exceptions\FieldDoesNotBelongToModelException;
-use Givebutter\LaravelCustomFields\Exceptions\WrongNumberOfFieldsForOrderingException;
+use Emarsoft\LaravelCustomFields\Models\CustomField;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
@@ -13,7 +12,7 @@ trait HasCustomFields
 {
     public function customFields(): MorphMany
     {
-        return $this->morphMany(config('custom-fields.models.custom-field'), 'model')->orderBy('order');
+        return $this->morphMany(CustomField::class, 'model');
     }
 
     public function validateCustomFields(Request|array|null $fields): Validator
@@ -22,9 +21,7 @@ trait HasCustomFields
             return $this->validateCustomFieldsRequest($fields);
         }
 
-        $customFields = $this->customFields()
-            ->whereNull('archived_at')
-            ->get();
+        $customFields = $this->customFields()->get();
 
         return new Validator(
             app('translator'),
@@ -40,37 +37,11 @@ trait HasCustomFields
         return $this->validateCustomFields($request->get(config('custom-fields.form-name', 'custom_fields')));
     }
 
-    /**
-     * Handle a request to order the fields.
-     *
-     * @param $fields
-     * @throws FieldDoesNotBelongToModelException
-     * @throws WrongNumberOfFieldsForOrderingException
-     */
-    public function order($fields)
-    {
-        $fields = collect($fields);
-
-        if ($fields->count() !== $this->customFields()->count()) {
-            throw new WrongNumberOfFieldsForOrderingException($fields->count(), $this->customFields()->count());
-        }
-
-        $fields->each(function ($id, $index) {
-            $customField = $this->customFields()->find($id);
-
-            if (! $customField) {
-                throw new FieldDoesNotBelongToModelException($id, $this);
-            }
-
-            $customField->update(['order' => $index + 1]);
-        });
-    }
-
     protected function validationData(array|null $fields, Collection $customFields): array
     {
         return collect($fields)
             ->intersectByKeys(array_flip($customFields->modelKeys()))
-            ->mapWithKeys(fn ($v, $k) => ["field_$k" => $v])
+            ->mapWithKeys(fn($v, $k) => ["field_$k" => $v])
             ->toArray();
     }
 
@@ -79,22 +50,20 @@ trait HasCustomFields
         return $fields
             ->map(function ($field): array {
                 $field->field_type->setValidationPrefix('field_');
-
                 return $field->validation_rules;
             })
-            ->flatMap(fn (array $ruleset): array => $ruleset)
+            ->flatMap(fn(array $ruleset): array => $ruleset)
             ->toArray();
     }
 
-     protected function validationAttributes(Collection $fields): array
-     {
-         return $fields
-             ->map(function ($field): array {
-                 $field->field_type->setValidationPrefix('field_');
-
-                 return $field->validation_attributes;
-             })
-             ->flatMap(fn (array $rules): array => $rules)
-             ->toArray();
-     }
+    protected function validationAttributes(Collection $fields): array
+    {
+        return $fields
+            ->map(function ($field): array {
+                $field->field_type->setValidationPrefix('field_');
+                return $field->validation_attributes;
+            })
+            ->flatMap(fn(array $rules): array => $rules)
+            ->toArray();
+    }
 }

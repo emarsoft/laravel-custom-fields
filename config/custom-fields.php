@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'form-name' => env('CUSTOM_FIELDS_FORM_NAME', 'custom_fields'),
+    'form-name' => 'custom_fields',
 
     'tables' => [
-        'fields' => env('CUSTOM_FIELDS_TABLE', 'custom_fields'),
-        'field-responses' => env('CUSTOM_FIELD_RESPONSES_TABLE', 'custom_field_responses'),
+        'fields' => 'custom_fields',
+        'field-values' => 'custom_field_values',
     ],
 
     'models' => [
-        'custom-field' => \Givebutter\LaravelCustomFields\Models\CustomField::class,
-        'custom-field-response' => \Givebutter\LaravelCustomFields\Models\CustomFieldResponse::class,
+        'custom-field' => \Emarsoft\LaravelCustomFields\Models\CustomField::class,
+        'custom-field-value' => \Emarsoft\LaravelCustomFields\Models\CustomFieldValue::class,
     ],
 
     /*
@@ -23,12 +23,12 @@ return [
     | register the corresponding response type below.
     */
     'fields' => [
-        'checkbox' => \Givebutter\LaravelCustomFields\FieldTypes\CheckboxFieldType::class,
-        'number' => \Givebutter\LaravelCustomFields\FieldTypes\NumberFieldType::class,
-        'radio' => \Givebutter\LaravelCustomFields\FieldTypes\RadioFieldType::class,
-        'select' => \Givebutter\LaravelCustomFields\FieldTypes\SelectFieldType::class,
-        'textarea' => \Givebutter\LaravelCustomFields\FieldTypes\TextareaFieldType::class,
-        'text' => \Givebutter\LaravelCustomFields\FieldTypes\TextFieldType::class,
+        'checkbox' => \Emarsoft\LaravelCustomFields\FieldTypes\CheckboxFieldType::class,
+        'number' => \Emarsoft\LaravelCustomFields\FieldTypes\NumberFieldType::class,
+        'radio' => \Emarsoft\LaravelCustomFields\FieldTypes\RadioFieldType::class,
+        'select' => \Emarsoft\LaravelCustomFields\FieldTypes\SelectFieldType::class,
+        'textarea' => \Emarsoft\LaravelCustomFields\FieldTypes\TextareaFieldType::class,
+        'text' => \Emarsoft\LaravelCustomFields\FieldTypes\TextFieldType::class,
     ],
 
     /*
@@ -41,12 +41,12 @@ return [
     | register the corresponding field type above.
     */
     'responses' => [
-        'checkbox' => \Givebutter\LaravelCustomFields\ResponseTypes\CheckboxResponseType::class,
-        'number' => \Givebutter\LaravelCustomFields\ResponseTypes\NumberResponseType::class,
-        'radio' => \Givebutter\LaravelCustomFields\ResponseTypes\RadioResponseType::class,
-        'select' => \Givebutter\LaravelCustomFields\ResponseTypes\SelectResponseType::class,
-        'textarea' => \Givebutter\LaravelCustomFields\ResponseTypes\TextareaResponseType::class,
-        'text' => \Givebutter\LaravelCustomFields\ResponseTypes\TextResponseType::class,
+        'checkbox' => \Emarsoft\LaravelCustomFields\ResponseTypes\CheckboxResponseType::class,
+        'number' => \Emarsoft\LaravelCustomFields\ResponseTypes\NumberResponseType::class,
+        'radio' => \Emarsoft\LaravelCustomFields\ResponseTypes\RadioResponseType::class,
+        'select' => \Emarsoft\LaravelCustomFields\ResponseTypes\SelectResponseType::class,
+        'textarea' => \Emarsoft\LaravelCustomFields\ResponseTypes\TextareaResponseType::class,
+        'text' => \Emarsoft\LaravelCustomFields\ResponseTypes\TextResponseType::class,
     ],
 
     /*

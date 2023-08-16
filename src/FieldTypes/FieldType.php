@@ -1,38 +1,32 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\FieldTypes;
+namespace Emarsoft\LaravelCustomFields\FieldTypes;
 
-use Givebutter\LaravelCustomFields\Models\CustomField;
+use Emarsoft\LaravelCustomFields\Models\CustomField;
 
 abstract class FieldType
 {
     protected string $validationPrefix = 'custom_fields.field_';
 
-    public function __construct(
-        protected CustomField $field,
-    ) {
+    public function __construct(protected CustomField $field)
+    {
         //
     }
 
     public function setValidationPrefix(string $prefix): self
     {
         $this->validationPrefix = $prefix;
-
         return $this;
     }
 
     public function validationRules(array $attributes): array
     {
-        return [
-            $this->validationPrefix . $this->field->id => ['required'],
-        ];
+        return [$this->validationPrefix . $this->field->id => ['required']];
     }
 
     public function validationAttributes(): array
     {
-        return [
-            $this->validationPrefix . $this->field->id => $this->field->title,
-        ];
+        return [$this->validationPrefix . $this->field->id => $this->field->title];
     }
 
     public function validationMessages(): array

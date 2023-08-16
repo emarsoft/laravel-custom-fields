@@ -1,87 +1,20 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\Models;
+namespace Emarsoft\LaravelCustomFields\Models;
 
-use Givebutter\LaravelCustomFields\Collections\CustomFieldCollection;
-use Givebutter\LaravelCustomFields\FieldTypes\FieldType;
+use Emarsoft\LaravelCustomFields\Collections\CustomFieldCollection;
+use Emarsoft\LaravelCustomFields\FieldTypes\FieldType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 
 class CustomField extends Model
 {
-    use SoftDeletes, HasFactory;
+    protected $table = 'custom_fields';
 
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var string[]|bool
-     */
-    protected $guarded = [
-        'id',
-    ];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $fillable = [
-        'group',
-        'type',
-        'title',
-        'description',
-        'answers',
-        'required',
-        'default_value',
-        'order',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'answers' => 'array',
-        'archived_at' => 'datetime',
-    ];
-
-    /**
-     * CustomField constructor.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->table = config('custom-fields.tables.fields', 'custom_fields');
-    }
-
-    /**
-     * Bootstrap the model and its traits.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        self::creating(function ($field) {
-            $lastFieldOnCurrentModel = $field->model
-                ->customFields()
-                ->reorder()
-                ->orderByDesc('order')
-                ->first();
-
-            $field->order = ($lastFieldOnCurrentModel ? $lastFieldOnCurrentModel->order : 0) + 1;
-        });
-    }
+    protected $fillable = ['model_id', 'model_type', 'title', 'description', 'type', 'options', 'default_value', 'required', 'sort_order', 'status'];
 
     public function model(): MorphTo
     {
@@ -90,65 +23,41 @@ class CustomField extends Model
 
     public function responses(): HasMany
     {
-        return $this->hasMany(config('custom-fields.models.custom-field-response'), 'field_id');
-    }
-
-    public function archive(): self
-    {
-        $this->forceFill([
-            'archived_at' => now(),
-        ])->save();
-
-        return $this;
-    }
-
-    public function unarchive(): self
-    {
-        $this->forceFill([
-            'archived_at' => null,
-        ])->save();
-
-        return $this;
+        return $this->hasMany(CustomFieldValue::class, 'field_id');
     }
 
     public function validationRules(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => $this->field_type->validationRules($attributes),
+            get: fn($value, $attributes) => $this->field_type->validationRules($attributes),
         );
     }
 
     public function validationAttributes(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => $this->field_type->validationAttributes(),
+            get: fn($value, $attributes) => $this->field_type->validationAttributes(),
         );
     }
 
     public function validationMessages(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => $this->field_type->validationMessages(),
+            get: fn($value, $attributes) => $this->field_type->validationMessages(),
         );
     }
 
     public function fieldType(): Attribute
     {
         return Attribute::get(
-            fn ($value, array $attributes) => App::makeWith(FieldType::class, [
+            fn($value, array $attributes) => App::makeWith(FieldType::class, [
                 'type' => $attributes['type'],
                 'field' => $this,
             ]),
         );
     }
 
-    /**
-     * Create a new Eloquent Collection instance.
-     *
-     * @param  array  $models
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function newCollection(array $models = [])
+    public function newCollection(array $models = []): CustomFieldCollection
     {
         return new CustomFieldCollection($models);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Givebutter\LaravelCustomFields\Interfaces;
+namespace Emarsoft\LaravelCustomFields\Interfaces;
 
 interface CustomFieldable
 {
